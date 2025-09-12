@@ -20,8 +20,7 @@ from typing import Sequence
 import numpy as np
 
 from qiskit.circuit import Parameter, QuantumCircuit
-from qiskit.primitives.base import BaseEstimatorV2
-from qiskit.primitives import BaseEstimator, BaseEstimatorV1, Estimator, EstimatorResult
+from qiskit.primitives import BaseEstimatorV1, BaseEstimatorV2, StatevectorEstimator, EstimatorResult
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.quantum_info.operators.base_operator import BaseOperator
 from qiskit.transpiler.passmanager import BasePassManager
@@ -111,7 +110,7 @@ class EstimatorQNN(NeuralNetwork):
         self,
         *,
         circuit: QuantumCircuit,
-        estimator: BaseEstimator | BaseEstimatorV2 | None = None,
+        estimator: BaseEstimatorV1 | BaseEstimatorV2 | None = None,
         observables: Sequence[BaseOperator] | BaseOperator | None = None,
         input_params: Sequence[Parameter] | None = None,
         weight_params: Sequence[Parameter] | None = None,
@@ -166,7 +165,7 @@ class EstimatorQNN(NeuralNetwork):
             QiskitMachineLearningError: Invalid parameter values.
         """
         if estimator is None:
-            estimator = Estimator()
+            estimator = StatevectorEstimator()
 
         if isinstance(estimator, BaseEstimatorV1):
             issue_deprecation_msg(

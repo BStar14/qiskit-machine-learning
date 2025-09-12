@@ -21,8 +21,7 @@ import numpy as np
 from qiskit.circuit import Parameter, QuantumCircuit
 from qiskit.providers import Options
 from qiskit.quantum_info.operators.base_operator import BaseOperator
-from qiskit.primitives.base import BaseEstimatorV2
-from qiskit.primitives import BaseEstimator, BaseEstimatorV1
+from qiskit.primitives import BaseEstimatorV1, BaseEstimatorV2
 from qiskit.transpiler.passmanager import BasePassManager
 
 from ..base.base_estimator_gradient import BaseEstimatorGradient
@@ -45,7 +44,7 @@ class SPSAEstimatorGradient(BaseEstimatorGradient):
     # pylint: disable=too-many-positional-arguments
     def __init__(
         self,
-        estimator: BaseEstimator,
+        estimator: BaseEstimatorV1 | BaseEstimatorV2,
         epsilon: float = 1e-6,
         batch_size: int = 1,
         seed: int | None = None,

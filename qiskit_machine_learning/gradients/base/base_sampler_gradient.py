@@ -22,8 +22,7 @@ from collections.abc import Sequence
 from copy import copy
 
 from qiskit.circuit import Parameter, ParameterExpression, QuantumCircuit
-from qiskit.primitives import BaseSampler, BaseSamplerV1
-from qiskit.primitives.utils import _circuit_key
+from qiskit.primitives import BaseSamplerV1, BaseSamplerV2
 from qiskit.providers import Options
 from qiskit.transpiler.passes import TranslateParameterizedGates
 from qiskit.transpiler.passmanager import BasePassManager
@@ -34,6 +33,7 @@ from ..utils import (
     _assign_unique_parameters,
     _make_gradient_parameters,
     _make_gradient_parameter_values,
+    _circuit_key,
 )
 from ...utils.deprecation import issue_deprecation_msg
 from ...algorithm_job import AlgorithmJob
@@ -44,7 +44,7 @@ class BaseSamplerGradient(ABC):
 
     def __init__(
         self,
-        sampler: BaseSampler,
+        sampler: BaseSamplerV1 | BaseSamplerV2,
         options: Options | None = None,
         pass_manager: BasePassManager | None = None,
     ):
@@ -65,7 +65,7 @@ class BaseSamplerGradient(ABC):
                 remedy="Use V2 primitives for continued compatibility and support.",
                 period="4 months",
             )
-        self._sampler: BaseSampler = sampler
+        self._sampler: BaseSamplerV1 | BaseSamplerV2 = sampler
         self._pass_manager = pass_manager
         self._default_options = Options()
         if options is not None:

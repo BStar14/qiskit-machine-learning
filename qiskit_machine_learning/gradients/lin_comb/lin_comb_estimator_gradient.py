@@ -19,17 +19,16 @@ from collections.abc import Sequence
 import numpy as np
 
 from qiskit.circuit import Parameter, QuantumCircuit
-from qiskit.primitives.base import BaseEstimatorV2
-from qiskit.primitives import BaseEstimator, BaseEstimatorV1
+from qiskit.primitives import BaseEstimatorV1, BaseEstimatorV2
 from qiskit.transpiler.passmanager import BasePassManager
 
-from qiskit.primitives.utils import init_observable, _circuit_key
+# from qiskit.primitives.utils import init_observable  # depricated
 from qiskit.providers import Options
 from qiskit.quantum_info.operators.base_operator import BaseOperator
 
 from ..base.base_estimator_gradient import BaseEstimatorGradient
 from ..base.estimator_gradient_result import EstimatorGradientResult
-from ..utils import DerivativeType, _make_lin_comb_gradient_circuit, _make_lin_comb_observables
+from ..utils import DerivativeType, _make_lin_comb_gradient_circuit, _make_lin_comb_observables, _circuit_key
 
 from ...exceptions import AlgorithmError
 
@@ -68,7 +67,7 @@ class LinCombEstimatorGradient(BaseEstimatorGradient):
 
     def __init__(
         self,
-        estimator: BaseEstimator,
+        estimator: BaseEstimatorV1 | BaseEstimatorV2,
         derivative_type: DerivativeType = DerivativeType.REAL,
         options: Options | None = None,
         pass_manager: BasePassManager | None = None,
@@ -148,7 +147,7 @@ class LinCombEstimatorGradient(BaseEstimatorGradient):
             n = len(gradient_circuits)
             # Make the observable as :class:`~qiskit.quantum_info.SparsePauliOp` and
             # add an ancillary operator to compute the gradient.
-            observable = init_observable(observable)
+            # observable = init_observable(observable)
             observable_1, observable_2 = _make_lin_comb_observables(
                 observable, self._derivative_type
             )

@@ -18,11 +18,10 @@ from numbers import Integral
 from typing import Callable, cast, Iterable, Sequence
 import numpy as np
 
-from qiskit.primitives import BaseSamplerV1
-from qiskit.primitives.base import BaseSamplerV2
+from qiskit.primitives import BaseSamplerV1, BaseSamplerV2
 
 from qiskit.circuit import Parameter, QuantumCircuit
-from qiskit.primitives import BaseSampler, SamplerResult, Sampler
+from qiskit.primitives import SamplerResult, StatevectorSampler
 from qiskit.result import QuasiDistribution
 from qiskit.transpiler.passmanager import BasePassManager
 
@@ -159,7 +158,7 @@ class SamplerQNN(NeuralNetwork):
         self,
         *,
         circuit: QuantumCircuit,
-        sampler: BaseSampler | None = None,
+        sampler: BaseSamplerV1 | BaseSamplerV2 | None = None,
         input_params: Sequence[Parameter] | None = None,
         weight_params: Sequence[Parameter] | None = None,
         sparse: bool = False,
@@ -218,7 +217,7 @@ class SamplerQNN(NeuralNetwork):
         """
         # Set primitive, provide default
         if sampler is None:
-            sampler = Sampler()
+            sampler = StatevectorSampler()
 
         if isinstance(sampler, BaseSamplerV1):
             issue_deprecation_msg(

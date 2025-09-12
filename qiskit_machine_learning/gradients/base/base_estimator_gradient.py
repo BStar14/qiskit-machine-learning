@@ -23,9 +23,7 @@ from copy import copy
 import numpy as np
 
 from qiskit.circuit import Parameter, ParameterExpression, QuantumCircuit
-from qiskit.primitives import BaseEstimator, BaseEstimatorV1
-from qiskit.primitives.base import BaseEstimatorV2
-from qiskit.primitives.utils import _circuit_key
+from qiskit.primitives import BaseEstimatorV1, BaseEstimatorV2
 from qiskit.providers import Options
 from qiskit.quantum_info.operators.base_operator import BaseOperator
 from qiskit.transpiler.passes import TranslateParameterizedGates
@@ -38,6 +36,7 @@ from ..utils import (
     _assign_unique_parameters,
     _make_gradient_parameters,
     _make_gradient_parameter_values,
+    _circuit_key,
 )
 from ...utils.deprecation import issue_deprecation_msg
 from ...algorithm_job import AlgorithmJob
@@ -48,7 +47,7 @@ class BaseEstimatorGradient(ABC):
 
     def __init__(
         self,
-        estimator: BaseEstimator | BaseEstimatorV2,
+        estimator: BaseEstimatorV1 | BaseEstimatorV2,
         options: Options | None = None,
         derivative_type: DerivativeType = DerivativeType.REAL,
         pass_manager: BasePassManager | None = None,
@@ -80,7 +79,7 @@ class BaseEstimatorGradient(ABC):
                 remedy="Use V2 primitives for continued compatibility and support.",
                 period="4 months",
             )
-        self._estimator: BaseEstimator = estimator
+        self._estimator: BaseEstimatorV1 | BaseEstimatorV2 = estimator
         self._pass_manager = pass_manager
         self._default_options = Options()
         if options is not None:
