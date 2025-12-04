@@ -206,7 +206,7 @@ class BaseEstimatorGradient(ABC):
             circuit_key = _circuit_key(circuit)
             if circuit_key not in self._gradient_circuit_cache:
                 unrolled = translator(circuit)
-                self._gradient_circuit_cache[circuit_key] = _assign_unique_parameters(unrolled)
+                self._gradient_circuit_cache[circuit_key] = unrolled # _assign_unique_parameters(unrolled)
             gradient_circuit = self._gradient_circuit_cache[circuit_key]
             g_circuits.append(gradient_circuit.gradient_circuit)
             g_parameter_values.append(
