@@ -199,7 +199,10 @@ class EstimatorQNN(NeuralNetwork):
         if isinstance(observables, BaseOperator):
             observables = (observables,)
 
-        self._observables = observables
+        if pass_manager is None:
+            self._observables = observables
+        else:
+            self._observables = [op.apply_layout(circuit.layout) for op in observables]
 
         if isinstance(circuit, QNNCircuit):
             issue_deprecation_msg(
